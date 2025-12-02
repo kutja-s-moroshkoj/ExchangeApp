@@ -11,7 +11,10 @@ import SwiftUI
 struct ScreenExApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationView {
+                BaseScreen()
+                    .toolbar(.hidden)
+            }
         }
     }
 }

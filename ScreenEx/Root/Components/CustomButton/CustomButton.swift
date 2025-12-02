@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct CustomButton: View {
+    
+    let iconName: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Image(systemName: iconName)
+            .font(.headline)
+            .foregroundStyle(Color.appColor.accebtAppcolor)
+            .frame(width: 55, height: 55)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundStyle(Color.appColor.backgroundAppcolor)
+            )
+            .shadow(color: Color.appColor.accebtAppcolor.opacity(0.4),
+                    radius: 10,
+                    x: 0,
+                    y: 0)
+            .padding()
     }
 }
 
 #Preview {
-    CustomButton()
+    Group {
+        CustomButton(iconName: "info.square")
+        CustomButton(iconName: "plus.viewfinder")
+            .colorScheme(.dark)
+    }
 }

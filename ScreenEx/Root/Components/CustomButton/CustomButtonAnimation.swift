@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct CustomButtonAnimation: View {
+    
+    @Binding var animate: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        RoundedRectangle(cornerRadius: 15)
+            .stroke(lineWidth: 5)
+            .scale(animate ? 1 : 0)
+            .opacity(animate ? 0 : 1)
+            .animation(.easeOut(duration: 1), value: animate)
+            .foregroundStyle(Color.appColor.accebtAppcolor)
     }
 }
 
 #Preview {
-    CustomButtonAnimation()
+    CustomButtonAnimation(animate: .constant(false))
+        .frame(width: 55, height: 55)
 }
