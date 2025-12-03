@@ -15,7 +15,7 @@ extension Color {
 }
 
 struct AppColors {
-    let accebtAppcolor = Color("AccentColor")
+    let accentAppcolor = Color("AccentColor")
     let backgroundAppcolor = Color("ColorforBackground")
     let colorPricesUp = Color("ColorForPricesUp")
     let colorPricesDown = Color("ColorForPricesDown")

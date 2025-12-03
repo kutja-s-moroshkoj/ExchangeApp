@@ -17,7 +17,7 @@ struct CustomButtonAnimation: View {
             .scale(animate ? 1 : 0)
             .opacity(animate ? 0 : 1)
             .animation(.easeOut(duration: 1), value: animate)
-            .foregroundStyle(Color.appColor.accebtAppcolor)
+            .foregroundStyle(Color.appColor.accentAppcolor)
     }
 }
 

@@ -44,7 +44,7 @@ extension BaseScreen {
             Text(goToTheNextScreen ? "PORTFOLIO" : "EXCHANGE")
                 .font(.headline)
                 .fontWeight(.heavy)
-                .foregroundStyle(Color.appColor.accebtAppcolor)
+                .foregroundStyle(Color.appColor.accentAppcolor)
                 .animation(.none)
             Spacer()
             CustomButton(iconName: "arrowtriangle.forward")
