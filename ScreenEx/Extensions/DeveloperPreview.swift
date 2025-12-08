@@ -5,6 +5,10 @@ class DeveloperPreview {
     
     private init() {}
     
+    let statisticPlaceholder = StatisticModel(title: "Market Cap", value: "20Tr$", percentageChange: 13.67)
+    let statisticPlaceholder2 = StatisticModel(title: "Total Volume", value: "12Bl$")
+    let statisticPlaceholder3 = StatisticModel(title: "Portfolio Value", value: "48.5k$", percentageChange: -30.45)
+    
     let coin = ExchangeModel(
         id: "bitcoin",
         symbol: "btc",

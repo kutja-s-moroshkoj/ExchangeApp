@@ -22,6 +22,8 @@ struct BaseScreen: View {
             VStack{
                 baseScreenHeader
                 
+                BaseStatView(showNextScreen: $goToTheNextScreen)
+                
                 SearchBar(searchText: $viewModel.searchText)
                 
                 columnsTitles
