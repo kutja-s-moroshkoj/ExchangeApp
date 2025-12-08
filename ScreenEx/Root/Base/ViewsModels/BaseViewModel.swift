@@ -23,7 +23,27 @@ class BaseViewModel: ObservableObject {
     }
     
     func addSubscribers() {
-        dataService.$exchangeCoins
+//        dataService.$exchangeCoins
+//            .sink { [weak self] returnedCoins in
+//                self?.exchangeCoin = returnedCoins
+//            }
+//            .store(in: &cancelables)
+        $searchText
+            .combineLatest(dataService.$exchangeCoins)
+            .map { text, startingCoins -> [ExchangeModel] in
+                guard !text.isEmpty else {
+                    return startingCoins
+                }
+                
+                let lowercasedText = text.lowercased()
+                
+                let filteredCoins = startingCoins.filter { coin -> Bool in
+                    return coin.name.lowercased().contains(lowercasedText) ||
+                    coin.symbol.lowercased().contains(lowercasedText) ||
+                    coin.id.lowercased().contains(lowercasedText)
+                }
+                return filteredCoins
+            }
             .sink { [weak self] returnedCoins in
                 self?.exchangeCoin = returnedCoins
             }
