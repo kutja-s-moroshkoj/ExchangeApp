@@ -16,6 +16,8 @@ class BaseViewModel: ObservableObject {
     private let dataService = MarketDataSrvice()
     var cancelables = Set<AnyCancellable>()
     
+    @Published var searchText: String = ""
+    
     init () {
         addSubscribers()
     }
