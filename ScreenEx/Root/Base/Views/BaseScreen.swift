@@ -10,6 +10,8 @@ import SwiftUI
 struct BaseScreen: View {
     
     @State private var goToTheNextScreen: Bool = false
+    @State private var showPortfolioScreen: Bool = false
+    
     @EnvironmentObject private var viewModel: BaseViewModel
     
     var body: some View {
@@ -18,6 +20,10 @@ struct BaseScreen: View {
             //задний фон
             Color.appColor.backgroundAppcolor
                 .ignoresSafeArea()
+                .sheet(isPresented: $showPortfolioScreen) {
+                    PortfolioScreen()
+                        .environmentObject(viewModel)
+                }
             //контент
             VStack{
                 baseScreenHeader
@@ -56,6 +62,11 @@ extension BaseScreen {
     private var baseScreenHeader: some View {
         HStack {
             CustomButton(iconName: goToTheNextScreen ? "plus.viewfinder" : "info.square.fill")
+                .onTapGesture {
+                    if goToTheNextScreen {
+                        showPortfolioScreen.toggle()
+                    }
+                }
                 .background(CustomButtonAnimation(animate: $goToTheNextScreen))
             Spacer()
             Text(goToTheNextScreen ? "PORTFOLIO" : "EXCHANGE")
