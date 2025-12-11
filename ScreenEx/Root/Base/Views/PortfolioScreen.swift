@@ -39,6 +39,11 @@ struct PortfolioScreen: View {
                     saveTollBarButton
                 }
             }
+            .onChange(of: viewModel.searchText) { oldValue, newValue in
+                if newValue == "" {
+                    removeSelection()
+                }
+            }
         }
     }
 }
@@ -111,17 +116,43 @@ extension PortfolioScreen {
     private var saveTollBarButton: some View {
         HStack(spacing: 10) {
             Image(systemName: "checkmark")
-                .foregroundStyle(Color.appColor.secondaryTextColor)
+                .foregroundStyle(Color.appColor.accentAppcolor)
                 .opacity(showCheckmark ? 1 : 0)
             Button {
-                
+                saveButtonPressed()
             } label: {
                 Text("save".uppercased())
-                    .foregroundStyle(Color.appColor.secondaryTextColor)
+                    .foregroundStyle(Color.appColor.accentAppcolor)
             }
             .opacity (
                 (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1 : 0
             )
         }
+    }
+    private func saveButtonPressed() {
+        
+        guard let coin = selectedCoin else { return }
+        
+        //логика сохранения в портфолио
+        
+        //логика отображения чекмарк
+        withAnimation(.easeIn) {
+            showCheckmark = true
+            removeSelection()
+        }
+        
+        // скрыть клавиатуру
+        UIApplication.shared.endEditing()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation(.easeOut) {
+                showCheckmark = false
+            }
+        }
+    }
+    
+    private func removeSelection() {
+        selectedCoin = nil
+        viewModel.searchText = ""
     }
 }
