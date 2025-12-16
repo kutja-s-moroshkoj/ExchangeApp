@@ -12,11 +12,13 @@ class BaseViewModel: ObservableObject {
     
     @Published var statArray: [StatisticModel] = []
     @Published var exchangeCoin: [ExchangeModel] = []
-    @Published var portfolioCoins: [ExchangeModel] = []
+    @Published var portfolioCoin: [ExchangeModel] = []
     
     private let exchangeDataService = MarketDataSrvice()
     
     private let globalDataService = GlobalDataService()
+    
+    private let portfolioDataService = PortfolioDataService()
     
     var cancelables = Set<AnyCancellable>()
     
@@ -32,6 +34,8 @@ class BaseViewModel: ObservableObject {
 //                self?.exchangeCoin = returnedCoins
 //            }
 //            .store(in: &cancelables)
+        
+        // обновляем массивexchangeCoin
         $searchText
             .combineLatest(exchangeDataService.$exchangeCoins)
             .map { text, startingCoins -> [ExchangeModel] in
@@ -53,6 +57,7 @@ class BaseViewModel: ObservableObject {
             }
             .store(in: &cancelables)
         
+        // обновляем массив statArray
         globalDataService.$marketData
             .map { globalData -> [StatisticModel] in
                 var stats: [StatisticModel] = []
@@ -77,5 +82,25 @@ class BaseViewModel: ObservableObject {
                 self?.statArray = returnedStats
             }
             .store(in: &cancelables)
+        
+        // обновляем portfolioCoin
+        $exchangeCoin
+            .combineLatest(portfolioDataService.$savedEntities)
+            .map { coinModels, portfolioEntities -> [ExchangeModel] in
+                coinModels.compactMap { coin -> ExchangeModel? in
+                    guard let entity = portfolioEntities.first(where: { $0.coinID == coin.id }) else {
+                        return nil
+                    }
+                    return coin.updateHoldings(amount: entity.amount)
+                }
+            }
+            .sink { [weak self] returnedCoins in
+                self?.portfolioCoin = returnedCoins
+            }
+            .store(in: &cancelables)
+    }
+    
+    func updatePortfolio(coin: ExchangeModel, amount: Double) {
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
 }

@@ -99,7 +99,7 @@ extension BaseScreen {
     
     private var portfolioCoinLis: some View {
         List {
-            ForEach(viewModel.portfolioCoins) { coin in
+            ForEach(viewModel.portfolioCoin) { coin in
                 CoinCell(coin: coin, showHoldings: true)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
                 

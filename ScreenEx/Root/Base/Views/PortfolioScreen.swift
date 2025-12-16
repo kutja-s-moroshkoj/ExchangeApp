@@ -55,18 +55,17 @@ struct PortfolioScreen: View {
 
 
 extension PortfolioScreen {
+    
     var coinListHorisontal: some View {
-        
-        
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 10) {
-                ForEach(viewModel.exchangeCoin) { coin in
+                ForEach(viewModel.searchText.isEmpty ? viewModel.portfolioCoin : viewModel.exchangeCoin) { coin in
                     CoinPortfolio(coin: coin)
                         .frame(width: 80)
                         .padding(6)
                         .onTapGesture {
                             withAnimation(.easeIn) {
-                                selectedCoin = coin
+                                updateSelectedCoin(coin: coin)
                             }
                         }
                         .background(
@@ -78,6 +77,18 @@ extension PortfolioScreen {
             .padding(.vertical)
             .padding(.leading)
         }
+    }
+    
+    private func updateSelectedCoin(coin: ExchangeModel) {
+        
+        selectedCoin = coin
+        
+       if let portfolioCoin = viewModel.portfolioCoin.first(where: {$0.id == coin.id}),
+          let amount = portfolioCoin.currentHoldings {
+           quantityText = "\(amount)"
+       } else {
+           quantityText = ""
+       }
     }
     
     private func getCurrentValue() -> Double {
@@ -131,9 +142,13 @@ extension PortfolioScreen {
     }
     private func saveButtonPressed() {
         
-        guard let coin = selectedCoin else { return }
+        guard
+            let coin = selectedCoin,
+            let amount = Double(quantityText)
+        else { return }
         
         //логика сохранения в портфолио
+        viewModel.updatePortfolio(coin: coin, amount: amount)
         
         //логика отображения чекмарк
         withAnimation(.easeIn) {
