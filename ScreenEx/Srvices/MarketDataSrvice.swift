@@ -18,7 +18,7 @@ class MarketDataSrvice {
         getMarketData()
     }
     
-    private func getMarketData() {
+    func getMarketData() {
         
         // Базовый URL
         let baseURL = "https://api.coingecko.com/api/v3/coins/markets"

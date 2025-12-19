@@ -41,6 +41,11 @@ extension Double {
     func fromNumberToString() -> String {
         return String(format: "%.2f", self)
     }
+    
+    func asCurruncyWith2Decimals() -> String {
+        return fromNumberToString() + "$"
+    }
+    
     /// конвертирует значение типа  Double в  Currency типа String, 2 символов после запятой + %
     /// ```
     /// конвертирует 1.2345 в "1.23%"

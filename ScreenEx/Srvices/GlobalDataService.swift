@@ -20,7 +20,7 @@ class GlobalDataService {
         getGlobalData()
     }
     
-    private func getGlobalData() {
+    func getGlobalData() {
         
         guard let url = URL(string: "https://api.coingecko.com/api/v3/global") else {
             fatalError("Не получилось использовать URL в классе GlobalDataService")

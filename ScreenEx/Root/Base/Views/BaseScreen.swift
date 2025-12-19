@@ -110,13 +110,68 @@ extension BaseScreen {
     
     private var columnsTitles: some View {
         HStack {
-            Text("TICKER")
+            HStack {
+                Text("TICKER")
+                Image(systemName: "chevron.down")
+                    .opacity((viewModel.sortOption == .rank || viewModel.sortOption == .rankReversed) ? 1 : 0)
+                    .rotationEffect(Angle(degrees: viewModel.sortOption == .rank ? 0 : 180))
+            }
+            .onTapGesture {
+                withAnimation(.default) {
+                    if viewModel.sortOption == .rank {
+                        viewModel.sortOption = .rankReversed
+                    } else {
+                        viewModel.sortOption = .rank
+                    }
+                }
+
+            }
             Spacer()
             if goToTheNextScreen {
-                Text("HOLDINGS")
+                
+                HStack {
+                    Text("HOLDINGS")
+                    Image(systemName: "chevron.down")
+                        .opacity((viewModel.sortOption == .holdings || viewModel.sortOption == .holdingsReversed) ? 1 : 0)
+                        .rotationEffect(Angle(degrees: viewModel.sortOption == .rank ? 0 : 180))
+                }
+                .onTapGesture {
+                    withAnimation(.default) {
+                        if viewModel.sortOption == .holdings {
+                            viewModel.sortOption = .holdingsReversed
+                        } else {
+                            viewModel.sortOption = .holdings
+                        }
+                    }
+
+                }
             }
-            Text("PRICE")
-                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            HStack {
+                Text("PRICE")
+                Image(systemName: "chevron.down")
+                    .opacity((viewModel.sortOption == .price || viewModel.sortOption == .priceReversed) ? 1 : 0)
+                    .rotationEffect(Angle(degrees: viewModel.sortOption == .rank ? 0 : 180))
+            }
+            .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            .onTapGesture {
+                withAnimation(.default) {
+                    if viewModel.sortOption == .price {
+                        viewModel.sortOption = .priceReversed
+                    } else {
+                        viewModel.sortOption = .price
+                    }
+                }
+
+            }
+            Button {
+                withAnimation(.linear(duration: 2)) {
+                    viewModel.reloadData()
+                }
+            } label: {
+                Image(systemName: "arrow.trianglehead.2.counterclockwise")
+            }
+            .rotationEffect(Angle(degrees: viewModel.isLoading ? 360 : 0), anchor: .center)
+
         }
         .font(.caption)
         .foregroundStyle(Color.appColor.secondaryTextColor)

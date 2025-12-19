@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
+
+class VibroManager {
+    
+    static private var generator = UINotificationFeedbackGenerator()
+    
+    static func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
+        generator.notificationOccurred(type)
+    }
+}
