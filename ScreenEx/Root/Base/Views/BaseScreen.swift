@@ -14,6 +14,9 @@ struct BaseScreen: View {
     
     @EnvironmentObject private var viewModel: BaseViewModel
     
+    @State private var selectedCoin: ExchangeModel? = nil
+    @State private var showDetailScreen: Bool = false
+    
     var body: some View {
         
         ZStack {
@@ -36,7 +39,7 @@ struct BaseScreen: View {
                 
                 if !goToTheNextScreen {
                     exchangeCoinLis
-                    .transition(.move(edge: .leading))
+                        .transition(.move(edge: .leading))
                 }
                 if goToTheNextScreen {
                     portfolioCoinLis
@@ -46,6 +49,14 @@ struct BaseScreen: View {
                 Spacer(minLength: 0)
             }
         }
+        .background(
+            NavigationLink(
+                destination: DetailLoadingScreen(coin: $selectedCoin),
+                isActive: $showDetailScreen,
+                label: {
+                    EmptyView()
+                })
+        )
     }
 }
 
@@ -91,7 +102,9 @@ extension BaseScreen {
             ForEach(viewModel.exchangeCoin) { coin in
                 CoinCell(coin: coin, showHoldings: false)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
-                
+                    .onTapGesture {
+                        goToDetailScreen(coin: coin)
+                    }
             }
         }
         .listStyle(.plain)
@@ -102,10 +115,17 @@ extension BaseScreen {
             ForEach(viewModel.portfolioCoin) { coin in
                 CoinCell(coin: coin, showHoldings: true)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
-                
+                    .onTapGesture {
+                        goToDetailScreen(coin: coin)
+                    }
             }
         }
         .listStyle(.plain)
+    }
+    
+    private func goToDetailScreen(coin: ExchangeModel) {
+        selectedCoin = coin
+        showDetailScreen.toggle()
     }
     
     private var columnsTitles: some View {
@@ -124,7 +144,7 @@ extension BaseScreen {
                         viewModel.sortOption = .rank
                     }
                 }
-
+                
             }
             Spacer()
             if goToTheNextScreen {
@@ -143,7 +163,7 @@ extension BaseScreen {
                             viewModel.sortOption = .holdings
                         }
                     }
-
+                    
                 }
             }
             HStack {
@@ -161,7 +181,7 @@ extension BaseScreen {
                         viewModel.sortOption = .price
                     }
                 }
-
+                
             }
             Button {
                 withAnimation(.linear(duration: 2)) {
@@ -171,7 +191,7 @@ extension BaseScreen {
                 Image(systemName: "arrow.trianglehead.2.counterclockwise")
             }
             .rotationEffect(Angle(degrees: viewModel.isLoading ? 360 : 0), anchor: .center)
-
+            
         }
         .font(.caption)
         .foregroundStyle(Color.appColor.secondaryTextColor)
