@@ -21,15 +21,17 @@ struct DetailLoadingScreen: View {
 
 struct DetailScreen: View {
     
-    let coin: ExchangeModel
+    @StateObject var viewModel: DetailViewModel
+
     
     init(coin: ExchangeModel) {
-        self.coin = coin
+        _viewModel = StateObject(wrappedValue: DetailViewModel(coin: coin))
         print("Инициализация для \(coin.name)")
     }
     
     var body: some View {
-        Text(coin.name)
+        
+        Text("1312")
     }
 }
 
